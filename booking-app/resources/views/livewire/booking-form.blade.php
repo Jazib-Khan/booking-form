@@ -3,7 +3,7 @@
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label>Hotel Name*</label>
-                <select wire:model="hotel_name" class="w-full border p-2 rounded">
+                <select wire:model="hotel_name" class="w-full border p-2 rounded" required>
                     <option value="">Select Hotel</option>
                     @foreach($hotels as $hotel)
                         <option value="{{ $hotel }}">{{ $hotel }}</option>
@@ -14,7 +14,7 @@
 
             <div>
                 <label>Room Type*</label>
-                <select wire:model="room_type" class="w-full border p-2 rounded">
+                <select wire:model="room_type" class="w-full border p-2 rounded" required>
                     <option value="">Select Room Type</option>
                     @foreach($room_types as $room)
                         <option value="{{ $room }}">{{ $room }}</option>
@@ -25,25 +25,25 @@
 
             <div>
                 <label>Dates*</label>
-                <input type="date" wire:model="dates" class="w-full border p-2 rounded">
+                <input type="date" wire:model="dates" class="w-full border p-2 rounded" required>
                 @error('dates') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label>Number of Nights*</label>
-                <input type="number" wire:model="nights" class="w-full border p-2 rounded">
+                <input type="number" wire:model="nights" class="w-full border p-2 rounded" required>
                 @error('nights') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label>Number of Rooms*</label>
-                <input type="number" wire:model="rooms" class="w-full border p-2 rounded">
+                <input type="number" wire:model="rooms" class="w-full border p-2 rounded" required>
                 @error('rooms') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label>Number of Pax*</label>
-                <input type="number" wire:model="pax" class="w-full border p-2 rounded">
+                <input type="number" wire:model="pax" class="w-full border p-2 rounded" required>
                 @error('pax') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
         </div>
