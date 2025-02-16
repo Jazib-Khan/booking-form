@@ -114,3 +114,6 @@
         </div>
     @endif
 </div>
+@if (session()->has('error'))
+    <p class="mt-2 text-red-500">{{ session('error') }}</p>
+@endif

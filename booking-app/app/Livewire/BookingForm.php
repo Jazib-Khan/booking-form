@@ -37,14 +37,17 @@ class BookingForm extends Component
             $start = Carbon::parse($this->check_in);
             $end = Carbon::parse($this->check_out);
             $days = $start->diffInDays($end);
-        }
 
-        if ($days > 7 ) {
-            $this->check_out = null;
-            $this->nights = $days;
-            session()->flash('error', 'Maximum stay is 7 nights.');
+            if ($days > 7) {
+                $this->check_out = null;
+                $this->nights = 0;
+                session()->flash('error', 'Maximum stay is 7 nights.');
+            } else {
+                $this->nights = $days;
+                session()->forget('error');
+            }
         } else {
-            $this->nights = $days;
+            $this->nights = 0;
         }
     }
 
