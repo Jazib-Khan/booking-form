@@ -3,24 +3,24 @@
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label>Hotel Name*</label>
-                <select wire:model="hotel_name" class="w-full border p-2 rounded" required>
+                <select wire:model.live="hotel_id" class="w-full border p-2 rounded" required>
                     <option value="">Select Hotel</option>
                     @foreach($hotels as $hotel)
-                        <option value="{{ $hotel }}">{{ $hotel }}</option>
+                        <option value="{{ $hotel->id }}">{{ $hotel->name }}</option>
                     @endforeach
                 </select>
-                @error('hotel_name') <span class="text-red-500">{{ $message }}</span> @enderror
+                @error('hotel_id') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label>Room Type*</label>
-                <select wire:model="room_type" class="w-full border p-2 rounded" required>
+                <select wire:model="room_type_id" class="w-full border p-2 rounded" required>
                     <option value="">Select Room Type</option>
                     @foreach($room_types as $room)
-                        <option value="{{ $room }}">{{ $room }}</option>
+                        <option value="{{ $room->id }}">{{ $room->type }}</option>
                     @endforeach
                 </select>
-                @error('room_type') <span class="text-red-500">{{ $message }}</span> @enderror
+                @error('room_type_id') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
@@ -36,21 +36,27 @@
             </div>
 
             <div>
-                <label>Number of Rooms*</label>
-                <input type="number" wire:model="rooms" class="w-full border p-2 rounded" required>
+                <label>Number of Rooms* (Max: 2)</label>
+                <input type="number" wire:model="rooms" class="w-full border p-2 rounded" required min="1" max="2" step="1">
                 @error('rooms') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
-                <label>Number of Pax*</label>
-                <input type="number" wire:model="pax" class="w-full border p-2 rounded" required>
+                <label>Number of Pax* (Max: 5)</label>
+                <input type="number" wire:model.live="pax" class="w-full border p-2 rounded" required>
                 @error('pax') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
         </div>
 
         <div class="mt-4">
-            <label>Notes</label>
-            <textarea wire:model="notes" class="w-full border p-2 rounded" placeholder="Additional requests..."></textarea>
+            <label>Notes{{ (int)$pax > 1 ? '*' : '' }}</label>
+            <textarea
+                wire:model="notes"
+                class="w-full border p-2 rounded"
+                placeholder="Additional requests..."
+                {{ (int)$pax > 1 ? 'required' : '' }}
+            ></textarea>
+            @error('notes') <span class="text-red-500">{{ $message }}</span> @enderror
         </div>
 
         <button type="submit" class="mt-4 w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">

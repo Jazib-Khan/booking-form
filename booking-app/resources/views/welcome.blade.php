@@ -19,7 +19,7 @@
             </style>
         @endif
     </head>
-    <body class="">
+    <body>
         @livewire('booking-form')
     </body>
 </html>
