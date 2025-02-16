@@ -30,7 +30,7 @@
                 x-data
                 x-init="flatpickr($el, {
                     mode: 'range',
-                    dateFormat: 'Y-m-d',
+                    dateFormat: 'd M Y',
                     minDate: 'today',
                     maxDate: new Date().fp_incr(365),
                     minRange: 1,
@@ -75,7 +75,7 @@
             <textarea
                 wire:model="notes"
                 class="w-full border p-2 rounded"
-                placeholder="Additional requests..."
+                placeholder="Notes, e.g. additional guests names, age of children, flexible dates, room upgrade request, beddding request, special requests, etc."
                 {{ (int)$pax > 1 ? 'required' : '' }}
             ></textarea>
             @error('notes') <span class="text-red-500">{{ $message }}</span> @enderror

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Booking;
 use App\Models\Hotel;
 use App\Models\RoomType;
 use Carbon\Carbon;
@@ -104,6 +105,18 @@ class BookingForm extends Component
 
         $this->calculateCost();
         $this->showCostTable = true;
+
+        Booking::create([
+            'hotel_id' => $this->hotel_id,
+            'room_type_id' => $this->room_type_id,
+            'check_in' => $this->check_in,
+            'check_out' => $this->check_out,
+            'nights' => $this->nights,
+            'rooms' => $this->rooms,
+            'pax' => $this->pax,
+            'notes' => $this->notes,
+            'total_cost' => $this->totalCost,
+        ]);
 
         session()->flash('message', 'Booking successfully submitted!');
     }
