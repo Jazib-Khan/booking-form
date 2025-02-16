@@ -24,14 +24,36 @@
             </div>
 
             <div>
-                <label>Dates*</label>
-                <input type="date" wire:model="dates" class="w-full border p-2 rounded" required>
-                @error('dates') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
+            <label>Dates*</label>
+            <input
+                type="text"
+                x-data
+                x-init="flatpickr($el, {
+                    mode: 'range',
+                    dateFormat: 'Y-m-d',
+                    minDate: 'today',
+                    maxDate: new Date().fp_incr(365),
+                    minRange: 1,
+                    maxRange: 7,
+                    onChange: function(selectedDates) {
+                        if (selectedDates.length === 2) {
+                            $wire.set('check_in', selectedDates[0].toISOString().split('T')[0]);
+                            $wire.set('check_out', selectedDates[1].toISOString().split('T')[0]);
+                            $wire.calculateNights();
+                        }
+                    }
+                })"
+                class="w-full border p-2 rounded"
+                required
+                placeholder="Select date range"
+            >
+            @error('check_in') <span class="text-red-500">{{ $message }}</span> @enderror
+            @error('check_out') <span class="text-red-500">{{ $message }}</span> @enderror
+        </div>
 
             <div>
                 <label>Number of Nights*</label>
-                <input type="number" wire:model="nights" class="w-full border p-2 rounded" required>
+                <input type="number" wire:model="nights" class="w-full border p-2 rounded bg-gray-100" readonly>
                 @error('nights') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
@@ -43,7 +65,7 @@
 
             <div>
                 <label>Number of Pax* (Max: 5)</label>
-                <input type="number" wire:model.live="pax" class="w-full border p-2 rounded" required>
+                <input type="number" wire:model.live="pax" class="w-full border p-2 rounded" required min="1" max="5" step="1">
                 @error('pax') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
         </div>
