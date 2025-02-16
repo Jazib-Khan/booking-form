@@ -14,7 +14,7 @@ class HotelSeeder extends Seeder
      */
     public function run(): void
     {
-        $hotel1 = Hotel::create(['name' => 'Grand Palace']);
+        $hotel1 = Hotel::create(['name' => 'The Evergreen Oasis']);
         $hotel2 = Hotel::create(['name' => 'Ocean View Resort']);
 
         RoomType::create([

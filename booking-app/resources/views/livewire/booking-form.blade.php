@@ -52,7 +52,7 @@
         </div>
 
             <div>
-                <label>Number of Nights*</label>
+                <label>Number of Nights* (Max: 7)</label>
                 <input type="number" wire:model="nights" class="w-full border p-2 rounded bg-gray-100" readonly>
                 @error('nights') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
@@ -89,4 +89,28 @@
             <p class="mt-2 text-green-500">{{ session('message') }}</p>
         @endif
     </form>
+
+    @if (!empty($costDetails))
+        <div class="mt-6">
+            <table class="w-full border-collapse border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border border-gray-300 p-2">Date</th>
+                        <th class="border border-gray-300 p-2">Details</th>
+                        <th class="border border-gray-300 p-2">Daily Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($costDetails as $detail)
+                        <tr>
+                            <td class="border border-gray-300 p-2">{{ $detail['date'] }}</td>
+                            <td class="border border-gray-300 p-2">{{ $detail['details'] }}</td>
+                            <td class="border border-gray-300 p-2">${{ number_format($detail['dailyTotal'], 2) }} USD</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <p class="mt-4 text-xl font-semibold">Total Cost: ${{ number_format($totalCost, 2) }} USD</p>
+        </div>
+    @endif
 </div>
