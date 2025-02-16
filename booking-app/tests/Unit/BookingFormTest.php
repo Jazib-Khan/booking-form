@@ -15,8 +15,7 @@ class BookingFormTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function it_displays_validation_errors_when_required_fields_are_missing()
+    public function test_it_displays_validation_errors_when_required_fields_are_missing()
     {
         Livewire::test(BookingForm::class)
             ->call('submit')
@@ -31,8 +30,7 @@ class BookingFormTest extends TestCase
             ]);
     }
 
-    /** @test */
-    public function it_does_not_allow_more_than_7_nights()
+    public function test_it_does_not_allow_more_than_7_nights()
     {
         $hotel = Hotel::factory()->create();
         $roomType = RoomType::factory()->create(['hotel_id' => $hotel->id]);
@@ -46,8 +44,7 @@ class BookingFormTest extends TestCase
             ->assertSee('Maximum stay is 7 nights.');
     }
 
-    /** @test */
-    public function it_correctly_calculates_total_cost()
+    public function test_it_correctly_calculates_total_cost()
     {
         $hotel = Hotel::factory()->create();
         $roomType = RoomType::factory()->create([
@@ -65,8 +62,7 @@ class BookingFormTest extends TestCase
             ->assertSet('totalCost', 2 * 150 * 2);
     }
 
-    /** @test */
-    public function it_stores_a_booking_in_the_database()
+    public function test_it_stores_a_booking_in_the_database()
     {
         $hotel = Hotel::factory()->create();
         $roomType = RoomType::factory()->create(['hotel_id' => $hotel->id]);
@@ -92,8 +88,7 @@ class BookingFormTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function it_updates_room_types_when_a_hotel_is_selected()
+    public function test_it_updates_room_types_when_a_hotel_is_selected()
     {
         $hotel = Hotel::factory()->create();
         $roomType1 = RoomType::factory()->create(['hotel_id' => $hotel->id]);
