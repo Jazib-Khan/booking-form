@@ -8,6 +8,8 @@ Run
 <pre><code>
 php artisan migrate
 php artisan db:seed --class=HotelSeeder
+php artisan serve
+npm run dev
 </code></pre>
 To get fields for hotels, rooms and costs per night.
 
