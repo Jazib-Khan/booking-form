@@ -14,7 +14,7 @@
 
             <div>
                 <label>Room Type*</label>
-                <select wire:model="room_type_id" class="w-full border p-2 rounded" required>
+                <select wire:model.live="room_type_id" class="w-full border p-2 rounded" required>
                     <option value="">Select Room Type</option>
                     @foreach($room_types as $room)
                         <option value="{{ $room->id }}">{{ $room->type }}</option>
@@ -39,7 +39,6 @@
                         if (selectedDates.length === 2) {
                             $wire.set('check_in', selectedDates[0].toISOString().split('T')[0]);
                             $wire.set('check_out', selectedDates[1].toISOString().split('T')[0]);
-                            $wire.calculateNights();
                         }
                     }
                 })"
@@ -59,7 +58,7 @@
 
             <div>
                 <label>Number of Rooms* (Max: 2)</label>
-                <input type="number" wire:model="rooms" class="w-full border p-2 rounded" required min="1" max="2" step="1">
+                <input type="number" wire:model.live="rooms" class="w-full border p-2 rounded" required min="1" max="2" step="1">
                 @error('rooms') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
@@ -73,13 +72,39 @@
         <div class="mt-4">
             <label>Notes{{ (int)$pax > 1 ? '*' : '' }}</label>
             <textarea
-                wire:model="notes"
+                wire:model.live="notes"
                 class="w-full border p-2 rounded"
                 placeholder="Notes, e.g. additional guests names, age of children, flexible dates, room upgrade request, beddding request, special requests, etc."
                 {{ (int)$pax > 1 ? 'required' : '' }}
             ></textarea>
             @error('notes') <span class="text-red-500">{{ $message }}</span> @enderror
         </div>
+
+        <!-- Cost table before the submit button -->
+        @if (count($costDetails) > 0)
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold mb-2">Cost Breakdown</h3>
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border border-gray-300 p-2">Date</th>
+                            <th class="border border-gray-300 p-2">Details</th>
+                            <th class="border border-gray-300 p-2">Daily Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($costDetails as $detail)
+                            <tr>
+                                <td class="border border-gray-300 p-2">{{ $detail['date'] }}</td>
+                                <td class="border border-gray-300 p-2">{{ $detail['details'] }}</td>
+                                <td class="border border-gray-300 p-2">${{ number_format($detail['dailyTotal'], 2) }} USD</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <p class="mt-4 text-xl font-semibold">Total Cost: ${{ number_format($totalCost, 2) }} USD</p>
+            </div>
+        @endif
 
         <button type="submit" class="mt-4 w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
             Submit Booking
@@ -89,30 +114,6 @@
             <p class="mt-2 text-green-500">{{ session('message') }}</p>
         @endif
     </form>
-
-    @if (!empty($costDetails))
-        <div class="mt-6">
-            <table class="w-full border-collapse border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border border-gray-300 p-2">Date</th>
-                        <th class="border border-gray-300 p-2">Details</th>
-                        <th class="border border-gray-300 p-2">Daily Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($costDetails as $detail)
-                        <tr>
-                            <td class="border border-gray-300 p-2">{{ $detail['date'] }}</td>
-                            <td class="border border-gray-300 p-2">{{ $detail['details'] }}</td>
-                            <td class="border border-gray-300 p-2">${{ number_format($detail['dailyTotal'], 2) }} USD</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <p class="mt-4 text-xl font-semibold">Total Cost: ${{ number_format($totalCost, 2) }} USD</p>
-        </div>
-    @endif
 </div>
 @if (session()->has('error'))
     <p class="mt-2 text-red-500">{{ session('error') }}</p>

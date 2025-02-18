@@ -13,7 +13,11 @@ class BookingForm extends Component
     public $hotel_id, $room_type_id, $dates, $nights, $rooms, $pax, $notes;
     public $hotels = [], $room_types=[], $check_in, $check_out;
     public $costDetails = [], $totalCost = 0;
-    public $showCostTable = false;
+
+    // Properties that affect cost calculation
+    protected $costDependentProperties = [
+        'hotel_id', 'room_type_id', 'check_in', 'check_out', 'rooms'
+    ];
 
     public function mount()
     {
@@ -21,12 +25,30 @@ class BookingForm extends Component
         $this->room_types = collect();
     }
 
-    public function updatedHotelId($hotelId)
+    public function updated($propertyName)
     {
-        if ($hotelId) {
-            $this->room_types = RoomType::where('hotel_id', $hotelId)->get();
+        // Special case for hotel_id to update room_types
+        if ($propertyName === 'hotel_id') {
+            $this->updateRoomTypes();
+        }
+
+        // Check if dates changed, calculate nights
+        if (in_array($propertyName, ['check_in', 'check_out'])) {
+            $this->calculateNights();
+        }
+
+        // If any property affecting cost changed, recalculate cost
+        if (in_array($propertyName, $this->costDependentProperties)) {
+            $this->calculateCost();
+        }
+    }
+
+    protected function updateRoomTypes()
+    {
+        if ($this->hotel_id) {
+            $this->room_types = RoomType::where('hotel_id', $this->hotel_id)->get();
         } else {
-            $this->room_types = collect(); // Empty the dropdown if no hotel is selected
+            $this->room_types = collect();
         }
         $this->room_type_id = ''; // Reset room type selection
     }
@@ -105,9 +127,6 @@ class BookingForm extends Component
     public function submit()
     {
         $validatedData = $this->validate();
-
-        $this->calculateCost();
-        $this->showCostTable = true;
 
         Booking::create([
             'hotel_id' => $this->hotel_id,
